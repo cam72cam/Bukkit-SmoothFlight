@@ -1,24 +1,29 @@
 package me.cmesh.SmoothFlight;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerListener;
 import org.bukkit.util.Vector;
 
-public class SmoothFlightPlayerListener extends PlayerListener
+public class SmoothFlightPlayerListener implements Listener
 {
 	private static SmoothFlight plugin;
 	
 	public SmoothFlightPlayerListener(SmoothFlight smoothFlight) 
 	{
 		plugin = smoothFlight;
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
+	
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
 		Player player = event.getPlayer();
 		if (plugin.hasPermission(player,"smoothflight.fly"))
-			if (plugin.flyTool == event.getPlayer().getItemInHand().getTypeId())
+			if (plugin.flyTool == player.getItemInHand().getTypeId())
 				if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
 				{
 					Vector dir = player.getLocation().getDirection().multiply(plugin.flySpeed);
