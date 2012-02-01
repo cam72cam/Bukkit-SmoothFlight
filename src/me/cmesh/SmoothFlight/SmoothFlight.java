@@ -8,6 +8,8 @@ public class SmoothFlight extends JavaPlugin
 {
 	public int flyTool;
 	public double flySpeed;
+	public short damageBreak = 10;
+	public boolean anyone = true;
 	
 	@Override
 	public void onEnable()
