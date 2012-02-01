@@ -8,14 +8,12 @@ public class SmoothFlight extends JavaPlugin
 {
 	public int flyTool;
 	public double flySpeed;
-	public short damageBreak = 10;
-	public boolean anyone = true;
 	
 	@Override
 	public void onEnable()
 	{
 		FileConfiguration config = getConfig();
-		
+		 
 		flyTool = config.getInt("smoothflight.fly.tool", 288);
 		config.set("smoothflight.fly.tool", 288);
 		flySpeed = config.getDouble("smoothflight.fly.speed", 1.0);
