@@ -33,7 +33,7 @@ public class SmoothFlightPlayerListener implements Listener
 					player.setVelocity(dir);
 					player.setFallDistance(0);
 					
-					if(/*!player.isOp() &&*/ new Random().nextInt(100) < 20)
+					if((!player.isOp() || plugin.opHunger) && new Random().nextInt(100) < plugin.hunger)
 					{
 						player.setFoodLevel(player.getFoodLevel()-1);
 					}

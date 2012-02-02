@@ -8,6 +8,8 @@ public class SmoothFlight extends JavaPlugin
 {
 	public int flyTool;
 	public double flySpeed;
+	public int hunger;
+	public boolean opHunger;
 	
 	@Override
 	public void onEnable()
@@ -15,9 +17,13 @@ public class SmoothFlight extends JavaPlugin
 		FileConfiguration config = getConfig();
 		 
 		flyTool = config.getInt("smoothflight.fly.tool", 288);
-		config.set("smoothflight.fly.tool", 288);
+		config.set("smoothflight.fly.tool", flyTool);
 		flySpeed = config.getDouble("smoothflight.fly.speed", 1.0);
-		config.set("smoothflight.fly.speed", 1.0);
+		config.set("smoothflight.fly.speed", flySpeed);
+		hunger = config.getInt("smoothflight.fly.hunger", 20);
+		config.set("smoothflight.fly.hunger", hunger);
+		opHunger = config.getBoolean("smoothflight.fly.opHunger", true);
+		config.set("smoothflight.fly.opHunger", opHunger);
 		
 		saveConfig();
 		
