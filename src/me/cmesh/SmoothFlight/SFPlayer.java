@@ -23,7 +23,7 @@ public class SFPlayer
 	public boolean canFly()
 	{
 		return 
-			plugin.hasPermission(player,"smoothflight.fly")
+			(!plugin.permissionsEnabled || plugin.hasPermission(player,"smoothflight.fly"))
 			&& plugin.flyTool == player.getItemInHand().getTypeId()
 			&& player.getFoodLevel() > 0;
 	}

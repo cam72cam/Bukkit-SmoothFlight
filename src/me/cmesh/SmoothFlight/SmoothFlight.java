@@ -15,6 +15,7 @@ public class SmoothFlight extends JavaPlugin
 	public int hunger;
 	public boolean opHunger; 
 	public boolean smoke;
+	public boolean permissionsEnabled;
 	
 	@Override
 	public void onEnable()
@@ -35,6 +36,9 @@ public class SmoothFlight extends JavaPlugin
 		
 		smoke = config.getBoolean("smoothflight.fly.smoke", true);
 		config.set("smoothflight.fly.opHunger", smoke);
+		
+		permissionsEnabled = config.getBoolean("smoothflight.fly.permissionsEnabled", true);
+		config.set("smoothflight.fly.opHunger", permissionsEnabled);
 		
 		saveConfig();
 		
