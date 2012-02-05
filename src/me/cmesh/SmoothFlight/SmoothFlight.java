@@ -1,6 +1,6 @@
 package me.cmesh.SmoothFlight;
 
-//import java.util.logging.Logger;
+import java.util.logging.*;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -18,6 +18,8 @@ public class SmoothFlight extends JavaPlugin
 	public boolean opHunger; 
 	public boolean smoke;
 	public boolean usePermissions;
+	
+	private SFPlayerListener listener;
 	
 	@Override
 	public void onEnable()
@@ -54,7 +56,8 @@ public class SmoothFlight extends JavaPlugin
 		
 		saveConfig();
 		
-		new SFPlayerListener(this);
+		listener = new SFPlayerListener(this);
+		fixLogger();
 	}	
 	@Override
 	public void onDisable() { }
@@ -62,5 +65,22 @@ public class SmoothFlight extends JavaPlugin
 	public boolean hasPermission(Player player, String permission)
 	{
 		return player.isOp() || player.hasPermission(permission);
+	}
+	
+	private void fixLogger()
+	{
+		log.setFilter(new Filter() 
+		{
+            public boolean isLoggable(LogRecord record)
+            {
+                if(record.getMessage().toLowerCase().endsWith(" was kicked for floating too long!"))
+                {
+                	Player p = getServer().getPlayer(record.getMessage().split(" ")[0]);
+                    SFPlayer player = listener.Players.get(p.getUniqueId());
+                    return !player.isFlying();
+                }
+                return true;
+            }
+        });
 	}
 }

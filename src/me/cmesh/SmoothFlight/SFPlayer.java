@@ -10,7 +10,7 @@ public class SFPlayer
 	private static SmoothFlight plugin;
 	
 	private Player player;
-	protected Long lastFly;
+	private Long lastFly;
 	protected boolean hover;
 	
 	public Player self() {return player;}
@@ -71,5 +71,9 @@ public class SFPlayer
 			player.setFoodLevel(player.getFoodLevel()-1);
 		
 		lastFly = player.getWorld().getTime();
+	}
+
+	public boolean isFlying() {
+		return lastFly != null && lastFly >= (player.getWorld().getTime() - 100);
 	}
 }

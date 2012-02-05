@@ -29,7 +29,8 @@ public class SFPlayerListener implements Listener
 	public void onPlayerKick(PlayerKickEvent event)
 	{
 		SFPlayer player = getPlayer(event.getPlayer());
-		if(player.lastFly != null && player.lastFly >= player.self().getWorld().getTime() - 100)
+		if(player.isFlying())
+			
 		{
 			event.setReason("");
 			event.setCancelled(true);
