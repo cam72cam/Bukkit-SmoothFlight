@@ -1,32 +1,37 @@
 package me.cmesh.SmoothFlight;
 
-import java.util.logging.Logger;
+//import java.util.logging.Logger;
 
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SmoothFlight extends JavaPlugin
 {
-	public static final Logger log = Logger.getLogger("Minecraft");
+	//public static final Logger log = Logger.getLogger("Minecraft");
 	
-	public int flyTool;
+	public Material flyTool;
 	public double flySpeed;
+	public double flySpeedSneak;
 	public int hunger;
 	public boolean opHunger; 
 	public boolean smoke;
-	public boolean permissionsEnabled;
+	public boolean usePermissions;
 	
 	@Override
 	public void onEnable()
 	{
 		FileConfiguration config = getConfig();
 		 
-		flyTool = config.getInt("smoothflight.fly.tool", 288);
-		config.set("smoothflight.fly.tool", flyTool);
+		flyTool = Material.getMaterial(config.getString("smoothflight.fly.tool", Material.FEATHER.name()));
+		config.set("smoothflight.fly.tool", flyTool.name());
 		
 		flySpeed = config.getDouble("smoothflight.fly.speed", 1.0);
 		config.set("smoothflight.fly.speed", flySpeed);
+		
+		flySpeedSneak = config.getDouble("smoothflight.fly.flySpeedSneak", 0.5);
+		config.set("smoothflight.fly.flySpeedSneak", flySpeedSneak);
 		
 		hunger = config.getInt("smoothflight.fly.hunger", 20);
 		config.set("smoothflight.fly.hunger", hunger);
@@ -35,10 +40,10 @@ public class SmoothFlight extends JavaPlugin
 		config.set("smoothflight.fly.opHunger", opHunger);
 		
 		smoke = config.getBoolean("smoothflight.fly.smoke", true);
-		config.set("smoothflight.fly.opHunger", smoke);
+		config.set("smoothflight.fly.smoke", smoke);
 		
-		permissionsEnabled = config.getBoolean("smoothflight.fly.permissionsEnabled", true);
-		config.set("smoothflight.fly.opHunger", permissionsEnabled);
+		usePermissions = config.getBoolean("smoothflight.fly.usePermissions", true);
+		config.set("smoothflight.fly.usePermissions", usePermissions);
 		
 		saveConfig();
 		

@@ -1,6 +1,7 @@
 package me.cmesh.SmoothFlight;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -9,13 +10,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class SFPlayerListener implements Listener
 {
 	private static SmoothFlight plugin;
 	
-	public HashMap<String, SFPlayer> Players = new HashMap<String, SFPlayer>();
+	public HashMap<UUID, SFPlayer> Players = new HashMap<UUID, SFPlayer>();
 	
 	public SFPlayerListener(SmoothFlight smoothFlight) 
 	{
@@ -23,12 +25,13 @@ public class SFPlayerListener implements Listener
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 	
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerKick(PlayerKickEvent event)
 	{
 		SFPlayer player = getPlayer(event.getPlayer());
 		if(player.lastFly != null && player.lastFly >= player.self().getWorld().getTime() - 100)
 		{
+			event.setReason("");
 			event.setCancelled(true);
 		}
 	}
@@ -36,7 +39,7 @@ public class SFPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerQuit(PlayerQuitEvent event)
 	{
-		Players.remove(event.getPlayer().getName());
+		Players.remove(event.getPlayer().getUniqueId());
 	}
 	
 	@EventHandler(priority = EventPriority.LOW)
@@ -45,19 +48,35 @@ public class SFPlayerListener implements Listener
 		SFPlayer player = getPlayer(event.getPlayer());
 		if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
 			if(player.canFly())
-			{
 				player.fly();
-			}
+		
+		if (event.getAction().equals(Action.LEFT_CLICK_AIR) || event.getAction().equals(Action.LEFT_CLICK_BLOCK))
+			player.setHover();
+		
+		if (player.self().getItemInHand().getType() != plugin.flyTool)
+			player.hover = false;
+	}
+	
+	@EventHandler
+	public void onPlayerMove(PlayerMoveEvent event)
+	{
+		SFPlayer player = getPlayer(event.getPlayer());
+		if(player.hover)
+		{
+			player.hover();
+			if (player.self().getItemInHand().getType() != plugin.flyTool)
+				player.hover = false;
+		}
 	}
 	
 	private void setPlayer(Player player)
 	{
-		Players.put(player.getName(), new SFPlayer(player, plugin));
+		Players.put(player.getUniqueId(), new SFPlayer(player, plugin));
 	}
 	
 	private SFPlayer getPlayer(Player player)
 	{
-		String key = player.getName();
+		UUID key = player.getUniqueId();
 		if(!Players.containsKey(key))
 		{
 			setPlayer(player);
