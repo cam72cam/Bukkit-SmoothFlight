@@ -9,7 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class SmoothFlight extends JavaPlugin
 {
-	//public static final Logger log = Logger.getLogger("Minecraft");
+	public static final Logger log = Logger.getLogger("Minecraft");
 	
 	public Material flyTool;
 	public double flySpeed;
@@ -23,9 +23,16 @@ public class SmoothFlight extends JavaPlugin
 	public void onEnable()
 	{
 		FileConfiguration config = getConfig();
-		 
-		flyTool = Material.getMaterial(config.getString("smoothflight.fly.tool", Material.FEATHER.name()));
-		config.set("smoothflight.fly.tool", flyTool.name());
+		
+		try
+		{
+			flyTool = Material.getMaterial(config.getString("smoothflight.fly.tool", Material.FEATHER.name()));
+			config.set("smoothflight.fly.tool", flyTool.name());
+		}
+		catch (java.lang.NullPointerException e)
+		{
+			log.info("[SMOOTHFLIGHT] Could not load material: " + config.getString("smoothflight.fly.tool"));
+		}
 		
 		flySpeed = config.getDouble("smoothflight.fly.speed", 1.0);
 		config.set("smoothflight.fly.speed", flySpeed);
