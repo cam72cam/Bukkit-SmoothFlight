@@ -31,16 +31,12 @@ public class SFPlayerListener implements Listener
 		SFPlayer player = getPlayer(event.getPlayer());
 		if(player.isFlying())
 		{
-<<<<<<< HEAD
-			event.setCancelled(true);
-=======
 			String reason = event.getReason();
 			if (reason != null && reason.equals("Flying is not enabled on this server"))
 			{
 				event.setReason("");
 				event.setCancelled(true);
 			}
->>>>>>> 44349f9e9bd887cd73394637007d58c84ff1882c
 		}
 	}
 	
