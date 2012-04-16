@@ -2,6 +2,7 @@ package me.cmesh.SmoothFlight;
 
 import java.util.Random;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -11,9 +12,7 @@ public class SFPlayer
 	
 	private Player player;
 	private Long lastFly;
-	protected boolean hover;
-	
-	public Player self() {return player;}
+	private boolean hover;
 	
 	public SFPlayer(Player player, SmoothFlight instance)
 	{
@@ -21,10 +20,19 @@ public class SFPlayer
 		plugin = instance;
 	}
 	
+	public Material getTool()
+	{
+		return player.getItemInHand().getType();
+	}
+	
+	private boolean hasPermission(String permission)
+	{
+		return player.isOp() || player.hasPermission(permission);
+	}
+	
 	public boolean canFly()
 	{
-		return 
-			(!plugin.usePermissions || plugin.hasPermission(player,"smoothflight.fly"))
+		return hasPermission("smoothflight.fly")
 			&& plugin.flyTool == player.getItemInHand().getType()
 			&& player.getFoodLevel() > 0;
 	}
@@ -36,19 +44,19 @@ public class SFPlayer
 		
 		double speed = player.isSneaking() ? plugin.flySpeedSneak : plugin.flySpeed;
 		
-		Vector dir = player.getLocation().getDirection();
+		Vector dir	=	player.getLocation().getDirection();
 		dir = dir.multiply(speed);
 		dir.setY(dir.getY()+0.60 * speed);
 		player.setVelocity(dir);
+		
 		player.setFallDistance(0);
 		
-		if((!player.isOp() || plugin.opHunger) && new Random().nextInt(100) < plugin.hunger)
-			player.setFoodLevel(player.getFoodLevel()-1);
+		hunger(plugin.hunger);
 		
 		lastFly = player.getWorld().getTime();
 	}
 	
-	public void setHover()
+	public void toggleHover()
 	{
 		if(hover)
 			hover = false;
@@ -56,9 +64,14 @@ public class SFPlayer
 			hover = true;
 	}
 	
+	public boolean isHovering()
+	{
+		return hover;
+	}
+	
 	public void hover()
 	{
-		if(player.getFoodLevel() <= 1)
+		if(player.getFoodLevel() <= 1 || player.getItemInHand().getType() != plugin.flyTool)
 			hover = false;
 		
 		if(plugin.smoke)
@@ -67,13 +80,19 @@ public class SFPlayer
 		player.setVelocity(new Vector(0,0.1D,0));
 		player.setFallDistance(0);
 		
-		if((!player.isOp() || plugin.opHunger) && new Random().nextInt(100) < plugin.hunger/2)
-			player.setFoodLevel(player.getFoodLevel()-1);
+		hunger(plugin.hunger/2);
 		
 		lastFly = player.getWorld().getTime();
 	}
 
-	public boolean isFlying() {
+	private void hunger(int hunger)
+	{
+		if((!player.isOp() || plugin.opHunger) && !hasPermission("smoothflight.nohunger") && new Random().nextInt(100) < hunger)
+			player.setFoodLevel(player.getFoodLevel()-1);
+	}
+	
+	public boolean isFlying() 
+	{
 		return lastFly != null && lastFly >= (player.getWorld().getTime() - 100);
 	}
 }

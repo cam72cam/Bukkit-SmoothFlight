@@ -17,7 +17,6 @@ public class SmoothFlight extends JavaPlugin
 	public int hunger;
 	public boolean opHunger; 
 	public boolean smoke;
-	public boolean usePermissions;
 	
 	private SFPlayerListener listener;
 	
@@ -51,20 +50,10 @@ public class SmoothFlight extends JavaPlugin
 		smoke = config.getBoolean("smoothflight.fly.smoke", true);
 		config.set("smoothflight.fly.smoke", smoke);
 		
-		usePermissions = config.getBoolean("smoothflight.fly.usePermissions", true);
-		config.set("smoothflight.fly.usePermissions", usePermissions);
-		
 		saveConfig();
 		
 		listener = new SFPlayerListener(this);
 		fixLogger();
-	}	
-	@Override
-	public void onDisable() { }
-	
-	public boolean hasPermission(Player player, String permission)
-	{
-		return player.isOp() || player.hasPermission(permission);
 	}
 	
 	private void fixLogger()
@@ -83,4 +72,7 @@ public class SmoothFlight extends JavaPlugin
             }
         });
 	}
+	
+	@Override
+	public void onDisable() { }
 }

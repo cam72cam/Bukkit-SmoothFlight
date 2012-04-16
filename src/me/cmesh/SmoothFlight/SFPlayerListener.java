@@ -30,9 +30,7 @@ public class SFPlayerListener implements Listener
 	{
 		SFPlayer player = getPlayer(event.getPlayer());
 		if(player.isFlying())
-			
 		{
-			event.setReason("");
 			event.setCancelled(true);
 		}
 	}
@@ -47,26 +45,26 @@ public class SFPlayerListener implements Listener
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
 		SFPlayer player = getPlayer(event.getPlayer());
-		if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
+		Action action = event.getAction();
+		
+		if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)
 			if(player.canFly())
 				player.fly();
 		
-		if (event.getAction().equals(Action.LEFT_CLICK_AIR) || event.getAction().equals(Action.LEFT_CLICK_BLOCK))
-			player.setHover();
+		if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK)
+			player.toggleHover();
 		
-		if (player.self().getItemInHand().getType() != plugin.flyTool)
-			player.hover = false;
+		if (player.isHovering() && player.getTool() != plugin.flyTool)
+			player.toggleHover();
 	}
 	
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event)
 	{
 		SFPlayer player = getPlayer(event.getPlayer());
-		if(player.hover)
+		if(player.isHovering())
 		{
 			player.hover();
-			if (player.self().getItemInHand().getType() != plugin.flyTool)
-				player.hover = false;
 		}
 	}
 	
