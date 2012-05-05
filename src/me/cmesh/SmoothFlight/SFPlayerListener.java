@@ -8,10 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 
 public class SFPlayerListener implements Listener
 {
@@ -28,7 +25,7 @@ public class SFPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerKick(PlayerKickEvent event)
 	{
-		SFPlayer player = getPlayer(event.getPlayer());
+		SFPlayer player = getPlayer(event);
 		if(player.isFlying())
 		{
 			String reason = event.getReason();
@@ -49,7 +46,7 @@ public class SFPlayerListener implements Listener
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
-		SFPlayer player = getPlayer(event.getPlayer());
+		SFPlayer player = getPlayer(event);
 		Action action = event.getAction();
 		
 		if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)
@@ -66,11 +63,9 @@ public class SFPlayerListener implements Listener
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event)
 	{
-		SFPlayer player = getPlayer(event.getPlayer());
+		SFPlayer player = getPlayer(event);
 		if(player.isHovering())
-		{
 			player.hover();
-		}
 	}
 	
 	private void setPlayer(Player player)
@@ -78,13 +73,12 @@ public class SFPlayerListener implements Listener
 		Players.put(player.getUniqueId(), new SFPlayer(player, plugin));
 	}
 	
-	private SFPlayer getPlayer(Player player)
+	private SFPlayer getPlayer(PlayerEvent event)
 	{
+		Player player = event.getPlayer();
 		UUID key = player.getUniqueId();
 		if(!Players.containsKey(key))
-		{
 			setPlayer(player);
-		}
 		return Players.get(key);
 	}
 }

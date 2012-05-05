@@ -6,7 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-public class SFPlayer 
+public class SFPlayer
 {
 	private static SmoothFlight plugin;
 	
@@ -32,9 +32,11 @@ public class SFPlayer
 	
 	public boolean canFly()
 	{
-		return hasPermission("smoothflight.fly")
-			&& plugin.flyTool == player.getItemInHand().getType()
-			&& player.getFoodLevel() > 0;
+		boolean correctTool = plugin.flyTool == player.getItemInHand().getType();
+		boolean hasFood = player.getFoodLevel() > 0;
+		Material block = player.getLocation().getBlock().getType();
+		boolean aboveWater = block != Material.WATER && block != Material.STATIONARY_WATER;
+		return hasPermission("smoothflight.fly") && correctTool && hasFood && aboveWater;
 	}
 	
 	public void fly()

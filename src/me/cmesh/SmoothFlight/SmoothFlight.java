@@ -23,6 +23,13 @@ public class SmoothFlight extends JavaPlugin
 	@Override
 	public void onEnable()
 	{
+		config();
+		listener = new SFPlayerListener(this);
+		fixLogger();
+	}
+	
+	private void config()
+	{	
 		FileConfiguration config = getConfig();
 		
 		try
@@ -51,9 +58,6 @@ public class SmoothFlight extends JavaPlugin
 		config.set("smoothflight.fly.smoke", smoke);
 		
 		saveConfig();
-		
-		listener = new SFPlayerListener(this);
-		fixLogger();
 	}
 	
 	private void fixLogger()
@@ -72,7 +76,4 @@ public class SmoothFlight extends JavaPlugin
             }
         });
 	}
-	
-	@Override
-	public void onDisable() { }
 }
