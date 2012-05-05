@@ -17,6 +17,8 @@ public class SmoothFlight extends JavaPlugin
 	public int hunger;
 	public boolean opHunger; 
 	public boolean smoke;
+	public int maxHeight;
+	public int minHeight;
 	
 	private SFPlayerListener listener;
 	
@@ -42,20 +44,28 @@ public class SmoothFlight extends JavaPlugin
 			log.info("[SMOOTHFLIGHT] Could not load material: " + config.getString("smoothflight.fly.tool"));
 		}
 		
-		flySpeed = config.getDouble("smoothflight.fly.speed", 1.0);
-		config.set("smoothflight.fly.speed", flySpeed);
+		String base = "smoothflight.fly.";
 		
-		flySpeedSneak = config.getDouble("smoothflight.fly.flySpeedSneak", 0.5);
-		config.set("smoothflight.fly.flySpeedSneak", flySpeedSneak);
+		flySpeed = config.getDouble(base + "speed", 1.0);
+		config.set(base + "speed", flySpeed);
 		
-		hunger = config.getInt("smoothflight.fly.hunger", 20);
-		config.set("smoothflight.fly.hunger", hunger);
+		flySpeedSneak = config.getDouble(base+"flySpeedSneak", 0.5);
+		config.set(base+"flySpeedSneak", flySpeedSneak);
 		
-		opHunger = config.getBoolean("smoothflight.fly.opHunger", true);
-		config.set("smoothflight.fly.opHunger", opHunger);
+		hunger = config.getInt(base+"hunger", 20);
+		config.set(base+"hunger", hunger);
 		
-		smoke = config.getBoolean("smoothflight.fly.smoke", true);
-		config.set("smoothflight.fly.smoke", smoke);
+		opHunger = config.getBoolean(base+"opHunger", true);
+		config.set(base+"opHunger", opHunger);
+		
+		smoke = config.getBoolean(base+"smoke", true);
+		config.set(base+"smoke", smoke);
+		
+		maxHeight = config.getInt(base+"maxHeight", 200);
+		config.set(base+"maxHeight", maxHeight);
+		
+		minHeight = config.getInt(base+"minHeight", 50);
+		config.set(base+"minHeight", minHeight);
 		
 		saveConfig();
 	}

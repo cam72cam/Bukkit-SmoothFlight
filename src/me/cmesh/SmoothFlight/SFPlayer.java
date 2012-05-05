@@ -36,9 +36,10 @@ public class SFPlayer
 		boolean hasFood = player.getFoodLevel() > 0;
 		Material block = player.getLocation().getBlock().getType();
 		boolean aboveWater = block != Material.WATER && block != Material.STATIONARY_WATER;
-		return hasPermission("smoothflight.fly") && correctTool && hasFood && aboveWater;
+		boolean properHeight = hasPermission("smoothfly.ignoreHeight") || 
+								(player.getLocation().getY() > plugin.minHeight && player.getLocation().getY() < plugin.maxHeight);
+		return hasPermission("smoothflight.fly") && correctTool && hasFood && aboveWater && properHeight;
 	}
-	
 	public void fly()
 	{
 		if(plugin.smoke)
