@@ -1,0 +1,12 @@
+smoothflight:
+  fly:
+    tool: FEATHER
+    speed: 1.0
+    flySpeedSneak: 0.5
+    hunger: 20
+    opHunger: true
+    smoke: true
+    maxHeight: 200
+    minHeight: 50
+    worlds:
+    - world

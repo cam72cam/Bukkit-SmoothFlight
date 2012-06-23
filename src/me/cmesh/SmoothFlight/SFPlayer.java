@@ -27,7 +27,17 @@ public class SFPlayer
 	
 	private boolean hasPermission(String permission)
 	{
-		return player.isOp() || player.hasPermission(permission);
+		boolean permissions = false;
+		boolean permissionsEx = false;
+		if(plugin.PermissionEnabled())
+		{
+			permissions = plugin.permissionsPlugin.permission(player, permission);
+		}
+		if(plugin.PermissionExEnabled())
+		{
+			permissionsEx = plugin.permissionsExPlugin.has(player, permission);
+		}
+		return player.isOp() || player.hasPermission(permission) || permissions || permissionsEx;
 	}
 	
 	public boolean canFly()
@@ -36,9 +46,12 @@ public class SFPlayer
 		boolean hasFood = player.getFoodLevel() > 0;
 		Material block = player.getLocation().getBlock().getType();
 		boolean aboveWater = block != Material.WATER && block != Material.STATIONARY_WATER;
-		boolean properHeight = hasPermission("smoothfly.ignoreHeight") || 
-								(player.getLocation().getY() > plugin.minHeight && player.getLocation().getY() < plugin.maxHeight);
-		return hasPermission("smoothflight.fly") && correctTool && hasFood && aboveWater && properHeight;
+		boolean properHeight = 
+			hasPermission("smoothfly.ignoreHeight") ||  
+			(player.getLocation().getY() > plugin.minHeight && player.getLocation().getY() < plugin.maxHeight);
+		boolean world = plugin.worlds.contains(player.getWorld().getName());
+		boolean dreamWorld = plugin.dreamWorlds.contains(player.getWorld().getName());
+		return dreamWorld || hasPermission("smoothflight.fly") && world && correctTool && hasFood && aboveWater && properHeight;
 	}
 	public void fly()
 	{
