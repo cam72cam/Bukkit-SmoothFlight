@@ -51,7 +51,8 @@ public class SFPlayer
 			(player.getLocation().getY() > plugin.minHeight && player.getLocation().getY() < plugin.maxHeight);
 		boolean world = plugin.worlds.contains(player.getWorld().getName());
 		boolean dreamWorld = plugin.dreamWorlds.contains(player.getWorld().getName());
-		return dreamWorld || hasPermission("smoothflight.fly") && world && correctTool && hasFood && aboveWater && properHeight;
+		return (dreamWorld || hasPermission("smoothflight.fly") && properHeight) && 
+				world && correctTool && hasFood && aboveWater;
 	}
 	public void fly()
 	{

@@ -92,7 +92,9 @@ public class SmoothFlight extends JavaPlugin
                 {
                 	Player p = getServer().getPlayer(record.getMessage().split(" ")[0]);
                     SFPlayer player = listener.Players.get(p.getUniqueId());
-                    return !player.isFlying();
+                    if(player != null) {
+                    	return !player.isFlying();
+                    };
                 }
                 return true;
             }
